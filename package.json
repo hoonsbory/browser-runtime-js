@@ -1,0 +1,12 @@
+{
+  "name": "eventloop",
+  "version": "1.0.0",
+  "description": "",
+  "main": "browser.js",
+  "type": "module",
+  "scripts": {
+    "start": "node browser.js"
+  },
+  "author": "",
+  "license": "ISC"
+}

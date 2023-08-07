@@ -1,12 +1,8 @@
 import { Queue } from './dataStructure.js';
-import EventLoop from './eventLoop.js';
 
 class WebAPIThreadPool {
-  static #instance;
+  eventLoop;
   constructor() {
-    if (WebAPIThreadPool.#instance) return WebAPIThreadPool.#instance;
-    WebAPIThreadPool.#instance = this;
-    this.eventLoop = new EventLoop();
     this.threadQueue = new Queue();
     this.webAPITaskQueue = new Queue();
   }

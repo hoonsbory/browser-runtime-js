@@ -13,11 +13,8 @@ class Queue {
   }
   enqueue(data) {
     const newNode = new Node(data);
-    newNode.data = data;
     if (!this.top) this.top = newNode;
-    else {
-      this.currEnqueuedNode.next = newNode;
-    }
+    else this.currEnqueuedNode.next = newNode;
     this.currEnqueuedNode = newNode;
     this.size += 1;
   }
@@ -26,6 +23,11 @@ class Queue {
     this.top = this.top?.next;
     this.size += -1;
     return temp;
+  }
+  forEach(callback, data = this.top) {
+    if (!data) return;
+    callback(data);
+    this.forEach(callback, data.next);
   }
 }
 

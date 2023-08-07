@@ -1,23 +1,15 @@
-import CallStack from './callStack.js';
 import { Queue } from './dataStructure.js';
-
 class EventLoop {
-  static #instance;
-  callStack = new CallStack();
+  callStack;
   macrotaskQueue = new Queue();
   rafQueue = new Queue();
   microtaskQueue = new Queue();
-  isLooping = false;
-  constructor() {
-    if (EventLoop.#instance) return EventLoop.#instance;
-    EventLoop.#instance = this;
-  }
   runMicroTask() {
-    while (this.microtaskQueue.top) {
+    while (this.isMicroTaskExist()) {
       console.log(
-        `micro task send to call stack => ${this.microtaskQueue.top.data.name}`,
+        `micro task send to call stack => ${this.microtaskQueue.top.data.callback.name}`,
       );
-      const task = this.microtaskQueue.top.data;
+      const task = this.microtaskQueue.top.data.callback;
       this.microtaskQueue.dequeue();
       this.callStack.push(task);
     }
@@ -40,19 +32,23 @@ class EventLoop {
       this.callStack.push(task);
     }
   }
+  isMicroTaskExist() {
+    return (
+      this.microtaskQueue.top &&
+      this.microtaskQueue.top.data.state === 'fullfilled'
+    );
+  }
   isTaskExist() {
     return (
-      this.rafQueue.top || this.macrotaskQueue.top || this.microtaskQueue.top
+      this.rafQueue.top || this.macrotaskQueue.top || this.isMicroTaskExist()
     );
   }
   runLoop() {
-    this.isLooping = true;
     while (this.callStack.isEmpty() && this.isTaskExist()) {
       this.runMacroTask();
       this.runMicroTask();
       this.runRafTask();
     }
-    this.isLooping = false;
   }
 }
 

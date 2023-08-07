@@ -1,15 +1,10 @@
 import { Stack } from './dataStructure.js';
-import EventLoop from './eventLoop.js';
-import WebAPIThreadPool from './webAPIThreadPool.js';
 
 class CallStack extends Stack {
-  static #instance;
+  WebAPIThreadPool;
+  eventLoop;
   constructor() {
     super();
-    if (CallStack.#instance) return CallStack.#instance;
-    CallStack.#instance = this;
-    this.WebAPIThreadPool = new WebAPIThreadPool();
-    this.eventLoop = new EventLoop();
   }
   push(context) {
     console.log(`push context! => ${context.name}`);
@@ -29,7 +24,7 @@ class CallStack extends Stack {
     if (data.callback)
       switch (data.type) {
         case 'micro':
-          this.eventLoop.microtaskQueue.enqueue(data.callback);
+          this.eventLoop.microtaskQueue.enqueue(data);
           break;
         case 'macro':
           this.WebAPIThreadPool.webAPITaskEnQueue(data);
@@ -40,6 +35,14 @@ class CallStack extends Stack {
         default:
           break;
       }
+
+    if (data.resolve)
+      this.eventLoop.microtaskQueue.forEach(node => {
+        if (node.data.name === data.resolve) {
+          node.data.state = 'fullfilled';
+          console.log(`${node.data.name} is fullfilled!`);
+        }
+      });
     this.pop();
   }
 }

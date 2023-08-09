@@ -5,14 +5,14 @@
 
 ## :page_with_curl: ​Summary
 
-> Implementing how event loops, call stacks, and web APIs interact with each other via JavaScript
+> Implementing the interaction between event loops, call stacks, and web APIs in JavaScript.
 <br>
 
 
 
 ### Description
 
-You can see in what order the prepared function objects are executed.
+The order in which the prepared function objects are executed can be observed.
 
 ```javascript
 function func1() {
@@ -29,7 +29,7 @@ function func1() {
 }
 ```
 
-Represent the above function as an object
+Present the function as an object.
 
 ```javascript
 const executeContext = {
@@ -81,17 +81,17 @@ const executeContext = {
 
 ```
 
-The object has a function name (name) and a child function (childFunc) that will be executed in scope.
+The object contains a function named 'name' and a child function called 'childFunc'. These functions will be executed within the scope.
 
-If it's an asynchronous function, it will have a callback.
+Asynchronous functions must have a callback.
 
-There are three types of asynchronous functions: macro, micro (Promise), and raf (requestAnimationFrame).
+There are three types of asynchronous functions: macro, micro (Promise), and raf (requestAnimationFrame) that can be employed.
 
-For promises, create a resolve property in the scope that does the resolving. The value is the name of the corresponding promise object.
+To create promises, add a 'resolve' property in the scope that resolves the promise. The value should match the name of the corresponding promise object.
 
-For macro tasks, there are various web APIs, but we fixed setTimeout to 0 seconds to make the sequence of actions clear.
+To make the sequence of actions clear for macro tasks, we set setTimeout to 0 seconds, although several web APIs are available.
 
-The thread pool for the WEB API is limited to a default value of 5.
+By default, the thread pool for the WEB API is limited to 5.
 
 <br/>
 
@@ -99,7 +99,7 @@ The thread pool for the WEB API is limited to a default value of 5.
 ```
 npm run start
 ```
-command to run the program, you'll see the following output.
+When you run the program with the command, you will see the following output.
 ```
 Push context! => func1
 Run context! => func1
@@ -149,7 +149,7 @@ Push context! => cb3
 Run context! => cb3
 Pop context! => cb3
 ```
-Additionally, you can enter the above function object via the CLI to use it like a browser's developer tools console window.
+Moreover, you can access the aforementioned function object through the CLI to utilize it similarly to a browser's developers console window.
 <br>
 
 

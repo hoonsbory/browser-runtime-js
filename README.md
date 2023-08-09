@@ -5,14 +5,14 @@
 
 ## :page_with_curl: ​Summary
 
-> Implementing the interaction between event loops, call stacks, and web APIs in JavaScript.
+> Implemented a browser in JavaScript to demonstrate the interaction between the event loop, callstack, and web API in a browser. <br> The event loop was implemented following the HTML specifications.
 <br>
 
 
 
 ### Description
 
-The order in which the prepared function objects are executed can be observed.
+For implementing function execution in the browser, we represent functions as objects and add them to the call stack.
 
 ```javascript
 function func1() {
@@ -29,7 +29,7 @@ function func1() {
 }
 ```
 
-Present the function as an object.
+This is what an object representation of the function above would look like
 
 ```javascript
 const executeContext = {
@@ -79,6 +79,33 @@ const executeContext = {
   ],
 };
 
+```
+
+### browser.js (main JS)
+```javascript
+class Browser {
+  constructor() {
+    this.callStack = new CallStack();
+    this.eventLoop = new EventLoop();
+    this.WebAPIThreadPool = new WebAPIThreadPool();
+    this.callStack.eventLoop = this.eventLoop;
+    this.callStack.WebAPIThreadPool = this.WebAPIThreadPool;
+    this.eventLoop.callStack = this.callStack;
+    this.WebAPIThreadPool.eventLoop = this.eventLoop;
+  }
+
+  start() {
+    this.callStack.push(executeContext);
+
+    // After the function finishes executing, you can try to execute it again by entering it in JSON format into the CLI, as demonstrated in the previous example
+    // ex) {"name" : "func1" }
+    rl.on('line', line => {
+      this.callStack.push(JSON.parse(line));
+    });
+  }
+}
+const browser = new Browser();
+browser.start();
 ```
 
 The object contains a function named 'name' and a child function called 'childFunc'. These functions will be executed within the scope.
@@ -149,7 +176,6 @@ Push context! => cb3
 Run context! => cb3
 Pop context! => cb3
 ```
-Moreover, you can access the aforementioned function object through the CLI to utilize it similarly to a browser's developers console window.
 <br>
 
 

@@ -24,7 +24,7 @@ function func1() {
     }, 0);
     func2();
   });
-  promise1().then(cb3);
+  promise2().then(cb3);
   requestAnimationFrame(cb5);
 }
 ```

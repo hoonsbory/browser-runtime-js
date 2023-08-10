@@ -21,10 +21,10 @@ function func1() {
   const promise2 = new Promise((resolve, reject) => {
     setTimeout(function cb4() {
       resolve();
-    }, 0);
+    }, 1000);
     func2();
   });
-  promise2().then(cb3);
+  promise2.then(cb3);
   requestAnimationFrame(cb5);
 }
 ```
@@ -38,6 +38,7 @@ const executeContext = {
     {
       name: 'setTimeout1',
       type: 'macro',
+      ms: 0,
       callback: {
         name: 'cb1',
       },
@@ -61,6 +62,7 @@ const executeContext = {
         {
           name: 'setTimeout2',
           type: 'macro',
+          ms: 1000,
           callback: {
             name: 'cb4',
             resolve: 'promise2',
@@ -132,26 +134,37 @@ Push context! => func1
 Run context! => func1
 Push context! => setTimeout1
 Run context! => setTimeout1
+Push setTimeout to web API Thread! => setTimeout1
 Start async => setTimeout1
+Complete async & Macro task send to Macrotask queue => cb1
 Pop context! => setTimeout1
 Push context! => promise1
 Run context! => promise1
+Push micro task to micro task queue! => cb2
 promise1 has fullfilled!
 Pop context! => promise1
 Push context! => promise2
 Run context! => promise2
 Push context! => setTimeout2
 Run context! => setTimeout2
+Push setTimeout to web API Thread! => setTimeout2
 Start async => setTimeout2
 Pop context! => setTimeout2
 Push context! => func2
 Run context! => func2
 Pop context! => func2
+Push micro task to micro task queue! => cb3
 Pop context! => promise2
 Push context! => raf1
 Run context! => raf1
+Push raf task to raf task queue! => cb5
 Pop context! => raf1
 Pop context! => func1
+callstack is empty. run event loop
+Oldest macro task send to call stack => cb1
+Push context! => cb1
+Run context! => cb1
+Pop context! => cb1
 Micro task send to call stack => cb2
 Push context! => cb2
 Run context! => cb2
@@ -160,12 +173,7 @@ Raf task send to call stack => cb5
 Push context! => cb5
 Run context! => cb5
 Pop context! => cb5
-Complete async => setTimeout1
-Oldest macro task send to call stack => cb1
-Push context! => cb1
-Run context! => cb1
-Pop context! => cb1
-Complete async => setTimeout2
+Complete async & Macro task send to Macrotask queue => cb4
 Oldest macro task send to call stack => cb4
 Push context! => cb4
 Run context! => cb4

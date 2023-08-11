@@ -80,7 +80,6 @@ const executeContext = {
     },
   ],
 };
-
 ```
 
 ### browser.js (main JS)
@@ -99,7 +98,8 @@ class Browser {
   start() {
     this.callStack.push(executeContext);
 
-    // After the function finishes executing, you can try to execute it again by entering it in JSON format into the CLI, as demonstrated in the previous example
+    // After the function finishes executing, you can try to execute it again by entering it in JSON format into the CLI,
+    //as demonstrated in the previous example
     // ex) {"name" : "func1" }
     rl.on('line', line => {
       this.callStack.push(JSON.parse(line));
@@ -110,17 +110,24 @@ const browser = new Browser();
 browser.start();
 ```
 
-The object contains a function named 'name' and a child function called 'childFunc'. These functions will be executed within the scope.
+Each function object has a common name (name
 
-Asynchronous functions must have a callback.
+Function execution within a function is indicated by the childFunc property.
 
-There are three types of asynchronous functions: macro, micro (Promise), and raf (requestAnimationFrame) that can be employed.
+If func2 was executed in func1, then func2 is the childFunc of func1.
 
-To create promises, add a 'resolve' property in the scope that resolves the promise. The value should match the name of the corresponding promise object.
+Asynchronous functions also use the type property to determine whether they are macro (regular tasks => setimeout, fetch ...), micro (Promise, MutationObserver ...), or requestAnimationFrame (raf).
 
-To make the sequence of actions clear for macro tasks, we set setTimeout to 0 seconds, although several web APIs are available.
+In this example, the macro task uses only setTimeout and the micro task uses only Promise.
 
-By default, the thread pool for the WEB API is limited to 5.
+Asynchronous functions have callback functions.
+
+For setTimeout, it has a milliseconds (ms) property.
+
+For Promise, you need to specify where in the scope to resolve to. In the example above, we change promise2 to fullfilled in the callback of setTimeout2. 
+The value of the resolve property must match the name of the promise object.
+
+
 
 <br/>
 

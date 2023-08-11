@@ -6,30 +6,27 @@ class EventLoop {
   microtaskQueue = new Queue();
   runMicroTask() {
     while (this.isMicroTaskExist()) {
-      console.log(
-        `micro task send to call stack => ${this.microtaskQueue.top.data.callback.name}`,
-      );
-      const task = this.microtaskQueue.top.data.callback;
+      const { data } = this.microtaskQueue.top;
+      console.log(`Micro task send to call stack => ${data.callback.name}`);
+      const task = data.callback;
       this.microtaskQueue.dequeue();
       this.callStack.push(task);
     }
   }
   runMacroTask() {
     if (this.macrotaskQueue.top) {
-      console.log(
-        `oldest macro task send to call stack => ${this.macrotaskQueue.top.data.name}`,
-      );
-      const task = this.macrotaskQueue.top.data;
+      const { data } = this.macrotaskQueue.top;
+      console.log(`Oldest macro task send to call stack => ${data.name}`);
       this.macrotaskQueue.dequeue();
-      this.callStack.push(task);
+      this.callStack.push(data);
     }
   }
   runRafTask() {
     if (this.rafQueue.top) {
-      console.log(`raf send to call stack => ${this.rafQueue.top.data.name}`);
-      const task = this.rafQueue.top.data;
+      const { data } = this.rafQueue.top;
+      console.log(`Raf task send to call stack => ${data.name}`);
       this.rafQueue.dequeue();
-      this.callStack.push(task);
+      this.callStack.push(data);
     }
   }
   isMicroTaskExist() {
@@ -44,11 +41,13 @@ class EventLoop {
     );
   }
   runLoop() {
+    this.isLooping = true;
     while (this.callStack.isEmpty() && this.isTaskExist()) {
       this.runMacroTask();
       this.runMicroTask();
       this.runRafTask();
     }
+    this.isLooping = false;
   }
 }
 

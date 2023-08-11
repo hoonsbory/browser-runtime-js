@@ -14,7 +14,7 @@ const rl = readline.createInterface({
 //   const promise2 = new Promise((resolve, reject) => {
 //     setTimeout(function cb4() {
 //       resolve();
-//     }, 0);
+//     }, 1000);
 //     func2();
 //   });
 //   promise1().then(cb3);
@@ -27,6 +27,7 @@ const executeContext = {
     {
       name: 'setTimeout1',
       type: 'macro',
+      ms: 0,
       callback: {
         name: 'cb1',
       },
@@ -48,8 +49,9 @@ const executeContext = {
       },
       childFunc: [
         {
-          name: 'setTimeout3',
+          name: 'setTimeout2',
           type: 'macro',
+          ms: 1000,
           callback: {
             name: 'cb4',
             resolve: 'promise2',
@@ -77,11 +79,6 @@ class Browser {
     this.callStack.WebAPIThreadPool = this.WebAPIThreadPool;
     this.eventLoop.callStack = this.callStack;
     this.WebAPIThreadPool.eventLoop = this.eventLoop;
-  }
-
-  //click, scroll ... => triggered by ui thread
-  gestureEvent(type) {
-    this.WebAPIThreadPool.webAPITaskEnQueue(eventCallback[type]);
   }
 
   start() {

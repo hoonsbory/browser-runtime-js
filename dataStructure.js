@@ -19,7 +19,7 @@ class Queue {
     this.size += 1;
   }
   dequeue() {
-    const temp = this.top.data;
+    const temp = this.top?.data;
     this.top = this.top?.next;
     this.size += -1;
     return temp;

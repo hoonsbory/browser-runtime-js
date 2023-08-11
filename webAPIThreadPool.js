@@ -12,10 +12,10 @@ class WebAPIThreadPool {
   }
   allocateThread() {
     if (this.threadQueue.size >= 5) {
-      console.log('thread is fulled');
+      console.log('Thread is fulled');
     } else
       this.threadQueue.enqueue(
-        new WebApi(
+        new WebAPI(
           this.onCompleteFunc.bind(this),
           this.webAPITaskQueue.dequeue(),
         ),
@@ -25,6 +25,9 @@ class WebAPIThreadPool {
     this.threadQueue.dequeue();
   }
   onCompleteFunc(func) {
+    console.log(
+      `Complete async & Macro task send to Macrotask queue => ${func.name}`,
+    );
     this.eventLoop.macrotaskQueue.enqueue(func);
     // this.sendMacroToQueue(func);
     this.eventLoop.runLoop();
@@ -32,7 +35,7 @@ class WebAPIThreadPool {
     if (this.webAPITaskQueue.top) this.allocateThread();
   }
 }
-class WebApi {
+class WebAPI {
   constructor(onCompleteFunc, func) {
     this.onCompleteFunc = onCompleteFunc;
     this.func = func;
@@ -40,11 +43,10 @@ class WebApi {
   }
 
   startAsyncFunction() {
-    console.log(`start async => ${this.func.name}`);
-    setTimeout(() => {
-      console.log(`complete async => ${this.func.name}`);
-      this.onCompleteFunc(this.func.callback);
-    }, 0);
+    console.log(`Start async => ${this.func.name}`);
+    if (this.func.ms === 0) this.onCompleteFunc(this.func.callback);
+    else
+      setTimeout(() => this.onCompleteFunc(this.func.callback), this.func.ms);
   }
 }
 

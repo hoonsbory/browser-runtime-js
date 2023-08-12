@@ -110,22 +110,23 @@ const browser = new Browser();
 browser.start();
 ```
 
-Each function object has a common name (name
+Each function object has a common name `(name)`
 
-Function execution within a function is indicated by the childFunc property.
+Function execution within a function is indicated by the `childFunc` property.
 
-If func2 was executed in func1, then func2 is the childFunc of func1.
+If `func2` was executed in `func1`, then `func2` is the `childFunc` of `func1`.
 
-Asynchronous functions also use the type property to determine whether they are macro (regular tasks => setimeout, fetch ...), micro (Promise, MutationObserver ...), or requestAnimationFrame (raf).
+Asynchronous functions also use the type property to determine whether they are `macro` (regular tasks => setimeout, fetch ...), `micro` (Promise, MutationObserver ...), or `requestAnimationFrame` (raf).
 
-In this example, the macro task uses only setTimeout and the micro task uses only Promise.
+> In this example, the`macro task` uses only `setTimeout` and the `micro task` uses only `Promise`.
+<br>
 
-Asynchronous functions have callback functions.
+Asynchronous functions have `callback` functions.
 
-For setTimeout, it has a milliseconds (ms) property.
+For `setTimeout`, it has a `milliseconds` (ms) property.
 
-For Promise, you need to specify where in the scope to resolve to. In the example above, we change promise2 to fullfilled in the callback of setTimeout2. 
-The value of the resolve property must match the name of the promise object.
+For `Promise`, you need to specify where in the scope to `resolve` to. In the example above, we change `promise2` to `fullfilled` in the `callback of setTimeout2`. 
+The value of the `resolve` property must match the `name of the Promise` object.
 
 
 
